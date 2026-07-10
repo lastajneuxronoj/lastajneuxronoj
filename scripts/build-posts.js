@@ -650,9 +650,10 @@ function renderMarkdownContent(md, lang, translations) {
 	// Twemoji al final
 	html = renderTwemojiContent(html);
 
-	// ← Agrega nombre del lenguaje de programación y formatea el código con color
+	// ← Agrega nombre del lenguaje de programación, formatea el código con color y agrega número de línea
 	html = addCodeLanguageLabels(html);
 	html = highlightCodeBlocks(html);
+	html = addLineNumbers(html);
 
 	return html;
 }
@@ -660,22 +661,42 @@ function renderMarkdownContent(md, lang, translations) {
 
 // Texto de bloque de código con formato
 function highlightCodeBlocks(html) {
+  const $ = cheerio.load(html);
 
-	const $ = cheerio.load(html);
+  $("pre code").each((_, element) => {
+    const el = $(element);
+    const code = el.text();
 
-	$("pre code").each((_, element) => {
+    const className = el.attr("class") || "";
+    const match = className.match(/language-([a-zA-Z0-9_-]+)/);
+    const languageId = match ? match[1] : null;
 
-		const code = $(element).text();
+    const highlighted = languageId && hljs.getLanguage(languageId)
+      ? hljs.highlight(code, { language: languageId })
+      : hljs.highlightAuto(code);
 
-		const highlighted = hljs.highlightAuto(code);
+    el.addClass(`hljs ${highlighted.language || ""}`.trim());
+    el.html(highlighted.value);
+  });
 
-		$(element)
-			.addClass(`hljs ${highlighted.language || ""}`)
-			.html(highlighted.value);
+  return $.html();
+}
 
-	});
+function addLineNumbers(html) {
+  const $ = cheerio.load(html);
 
-	return $.html();
+  $("pre > code").each((_, code) => {
+    const el = $(code);
+    const text = el.text();
+    const lineCount = text.replace(/\n$/, "").split("\n").length;
+
+    const rows = Array.from({ length: lineCount }, () => "<span></span>").join("");
+
+    el.parent().addClass("has-line-numbers");
+    el.before(`<span class="line-numbers-rows" aria-hidden="true">${rows}</span>`);
+  });
+
+  return $.html();
 }
 
 function addCodeLanguageLabels(html) {
@@ -714,8 +735,12 @@ function addCodeLanguageLabels(html) {
 			languageNames[languageId] || match[1];
 
 		$(pre).before(
-			`<div class="code-language">${language}</div>`
-			
+		  `<div class="code-language">
+		    <span class="code-language-name">${language}</span>
+		    <button type="button" class="copy-button" aria-label="Copiar código">
+		      <i class="ti ti-copy" aria-hidden="true"></i>
+		    </button>
+		  </div>`
 		);
 
 	});

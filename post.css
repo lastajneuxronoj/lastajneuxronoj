@@ -1,32 +1,6 @@
-/* VARIABLES */
-:root {
-	--background-color: #f4f1ec;
-	--base-color: rgba(220, 211, 197, 0.50);
-	--primary-color: #222831;
-	--secondary-color: #393E46;
-	--tertiary-color: #948979;
-	--quaternary-color: #DFD0B8;
-	--progress-color: #222831;
-	--progress-complete: #006400;
-}
-
-/* COLORES MODO OSCURO */
-body.dark {
-	--background-color: #0c0e11;
-	--base-color: rgba(220, 211, 197, 0.1);
-	--primary-color: #f4f1ec;
-	--secondary-color: #DFD0B8;
-	--tertiary-color: #948979;
-	--quaternary-color: #DFD0B8;
-	--progress-color: #f4f1ec;
-	--progress-complete: #00aa00;
-}
-
-.post-body {
-	max-width: 60%;
-	margin: 0px auto 0px auto;
-	color: var(--primary-color);
-}
+/* ==========================================
+   ENCABEZADO DEL POST
+========================================== */
 
 .post-header {
 	position: relative;
@@ -67,17 +41,15 @@ body.dark {
 	text-transform: uppercase;
 }
 
-.post-content {
-	text-align: justify;
-	font-family: "Vollkorn", serif;
-	font-size: 1.2rem;
-	line-height: 1.5;
-	font-weight: 400;
-	color: var(--primary-color);
-}
 
-.post-content p {
-	margin-bottom: 1rem;
+/* ==========================================
+   LAYOUT DEL POST
+========================================== */
+
+.post-body {
+	max-width: 60%;
+	margin: 0px auto 0px auto;
+	color: var(--primary-color);
 }
 
 .rect-line {
@@ -89,7 +61,20 @@ body.dark {
 	opacity: 0.75;
 }
 
-/* VOLVER AL INICIO */
+.post-signature {
+	text-align: right;
+	font-size: 1rem;
+	margin-top: 3rem;
+	margin-bottom: 2rem;
+	color: var(--secondary-color);
+	font-family: "Vollkorn", serif;
+}
+
+
+/* ==========================================
+   VOLVER AL INICIO
+========================================== */
+
 .back-link {
 	display: flex;
 	align-items: center;
@@ -129,16 +114,11 @@ body.dark {
 	transform: scaleX(1);
 }
 
-.post-signature {
-	text-align: right;
-	font-size: 1rem;
-	margin-top: 3rem;
-	margin-bottom: 2rem;
-	color: var(--secondary-color);
-	font-family: "Vollkorn", serif;
-}
 
-/* CONTROLES DE NAVEGACIÓN */
+/* ==========================================
+   CONTROLES DE NAVEGACIÓN (post anterior / siguiente)
+========================================== */
+
 .post-nav-controls {
 	display: flex;
 	justify-content: space-between;
@@ -157,7 +137,6 @@ body.dark {
 	font-size: 0.75rem;
 	display: flex;
 	flex-direction: column;
-	
 }
 
 .prev-post {
@@ -178,8 +157,6 @@ body.dark {
 	margin-left: auto;
 }
 
-
-/* Animación underline */
 .post-nav::after {
 	content: "";
 	position: absolute;
@@ -198,11 +175,14 @@ body.dark {
 	transform: scaleX(1);
 }
 
-/* BARRA DE PROGRESO */
+
+/* ==========================================
+   BARRA DE PROGRESO DE LECTURA
+========================================== */
+
 .progress-bar-container {
 	position: fixed;
-	top: 67px;
-	/* altura de .top-bar (~1rem padding + font) */
+	top: 67px; /* altura de .top-bar (~1rem padding + font) */
 	left: 0;
 	right: 0;
 	height: 6px;
@@ -220,7 +200,30 @@ body.dark {
 	background-color: var(--progress-complete);
 }
 
-/* ESTILOS DEL CONTENIDO */
+
+/* ==========================================
+   CUERPO DEL POST (contenido renderizado desde Markdown)
+   ⚠️ Mismo nombre de clase que .post-content en style.css,
+   pero acá representa el ARTÍCULO COMPLETO, no el resumen
+   de una tarjeta de la lista. Si ambos CSS se cargan en la
+   misma página, revisar que no se pisen entre sí — en
+   particular, style.css tiene reglas `.post-content pre`
+   pensadas para ESTE .post-content (el de acá), no el suyo.
+========================================== */
+
+.post-content {
+	text-align: justify;
+	font-family: "Vollkorn", serif;
+	font-size: 1.2rem;
+	line-height: 1.5;
+	font-weight: 400;
+	color: var(--primary-color);
+}
+
+.post-content p {
+	margin-bottom: 1rem;
+}
+
 /* Títulos */
 .post-content h1 {
 	font-family: 'Hubot Sans', sans-serif;
@@ -265,7 +268,7 @@ body.dark {
 	font-style: italic;
 }
 
-/* Código en línea */
+/* Código en línea (distinto de los bloques <pre>, definidos en style.css) */
 .post-content code {
 	background-color: var(--primary-color);
 	color: var(--background-color);
@@ -304,24 +307,6 @@ body.dark {
 	color: var(--tertiary-color);
 }
 
-
-/* Bloques de código */
-.post-content pre {
-	background-color: var(--primary-color) !important;
-	padding: 1rem;
-	border-top-right-radius: 8px;
-	border-bottom-left-radius: 8px;
-	border-bottom-right-radius: 8px;
-	overflow-x: auto;
-	margin-bottom: 1rem;
-}
-
-.post-content pre code {
-	font-family: 'Courier New', monospace;
-	color: var(--background-color);
-	font-size: 0.95rem;
-}
-
 /* Listas */
 .post-content ul,
 .post-content ol {
@@ -341,7 +326,6 @@ body.dark {
 	border-radius: 6px;
 }
 
-
 /* Epígrafe */
 .post-epigraph {
 	margin: auto;
@@ -353,4 +337,3 @@ body.dark {
 	color: var(--tertiary-color);
 	font-family: "Vollkorn", serif;
 }
-

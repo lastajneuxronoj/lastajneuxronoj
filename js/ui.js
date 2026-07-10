@@ -407,7 +407,7 @@ function updateHighlightTheme(theme) {
 
 
 
-//Agrega un scroll suave
+// Agrega un scroll suave
 document.querySelectorAll('a[href^="#"]').forEach(link => {
 	link.addEventListener("click", function (event) {
 		const id = this.getAttribute("href");
@@ -426,5 +426,55 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 		});
 
 		history.pushState(null, "", id);
+
+		highlightCaption(target);
 	});
+});
+
+// Encuentra la descripción asociada a un elemento referenciado
+function findCaption(target) {
+	if (target.matches(".equation-block")) {
+		return target.querySelector(".equation-number") || target;
+	}
+
+	if (target.tagName === "FIGURE") {
+		return target.querySelector("figcaption") || target;
+	}
+
+	if (target.matches(".table-wrapper")) {
+		const sibling = target.nextElementSibling;
+		if (sibling && sibling.classList.contains("table-caption")) {
+			return sibling;
+		}
+	}
+
+	return target; // fallback: resalta el propio elemento
+}
+
+// Dispara la animación de resaltado (soporta clicks repetidos)
+function highlightCaption(target) {
+	const caption = findCaption(target);
+
+	caption.classList.remove("highlight-flash");
+	void caption.offsetWidth; // fuerza reflow para poder re-disparar la animación
+	caption.classList.add("highlight-flash");
+
+	caption.addEventListener("animationend", () => {
+		caption.classList.remove("highlight-flash");
+	}, { once: true });
+}
+
+// Botón de copiar código
+document.querySelectorAll(".copy-button").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const code = btn.closest(".code-language").nextElementSibling.querySelector("code");
+    const icon = btn.querySelector("i");
+    try {
+      await navigator.clipboard.writeText(code.textContent);
+      icon.className = "ti ti-check";
+      setTimeout(() => { icon.className = "ti ti-copy"; }, 1500);
+    } catch {
+      icon.className = "ti ti-x";
+    }
+  });
 });

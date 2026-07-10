@@ -1,5 +1,7 @@
 /* ==========================================
    VARIABLES GLOBALES
+   (compartidas por todo el sitio, incluidas
+   las páginas de post)
 ========================================== */
 
 :root {
@@ -58,7 +60,11 @@ html.dark, body.dark {
 	--table-hover-color: var(--base-color);
 }
 
-/* Reset básico */
+
+/* ==========================================
+   RESET Y BASE
+========================================== */
+
 * {
 	margin: 0;
 	padding: 0;
@@ -94,6 +100,11 @@ main {
 	display: block;
 }
 
+
+/* ==========================================
+   LOGO Y TIPOGRAFÍAS AUXILIARES
+========================================== */
+
 #logo-text {
 	font-family: var(--font-logo);
 	font-style: italic;
@@ -108,21 +119,18 @@ main {
 	text-decoration: none;
 }
 
-/*Tipografías auxiliares*/
 .sxava_text {
 	font-family: 'Noto Sans Shavian', sans-serif;
 }
 
 
-/* Lista de posts */
-.post-list {
-	padding: 2rem 0;
-	display: flex;
-	flex-direction: column;
-	gap: 2rem;
-}
+/* ==========================================
+   LISTA DE POSTS (tarjetas)
+========================================== */
 
+.post-list,
 #post-list {
+	padding: 2rem 0;
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
@@ -130,6 +138,7 @@ main {
 
 .post-section-header {
 	position: relative;
+	padding-left: 24px;
 }
 
 .section-title-bg {
@@ -159,10 +168,8 @@ main {
 	text-transform: uppercase;
 	color: var(--primary-color);
 	padding-bottom: 50px;
-	/*border-bottom: 3px solid var(--primary-color);*/
 }
 
-/* Tarjeta */
 .post-card {
 	display: flex;
 	justify-content: space-between;
@@ -196,7 +203,6 @@ main {
 	font-family: var(--font-ui);
 	font-weight: 800;
 	font-size: 4rem;
-	font-weight: bold;
 	color: var(--primary-color);
 	width: auto;
 	text-align: left;
@@ -233,24 +239,13 @@ main {
 	min-width: 0;
 }
 
-.post-title {
-	font-family: var(--font-ui);
-	text-align: start;
-	font-weight: 600;
-	letter-spacing: 1px;
-	font-size: 1.5rem;
-	font-weight: bold;
-	margin-bottom: 0.3rem;
-	color: var(--primary-color);
-}
-
+.post-title,
 .post-title-index {
 	font-family: var(--font-ui);
 	text-align: start;
-	font-weight: 600;
+	font-weight: bold;
 	letter-spacing: 1px;
 	font-size: 1.5rem;
-	font-weight: bold;
 	margin-bottom: 0.3rem;
 	color: var(--primary-color);
 }
@@ -279,6 +274,141 @@ main {
 	text-overflow: ellipsis;
 }
 
+
+/* ==========================================
+   PORTADAS Y BADGES (posts y tarjetas)
+========================================== */
+
+.post-cover {
+	--badge-size: 64px;
+	position: relative;
+	margin-bottom: 3.5rem;
+}
+
+.post-cover-image {
+	display: block;
+	width: 100%;
+	height: 280px;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
+.post-emoji-badge {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 64px;
+	height: 64px;
+	background: var(--bg-color, #1a1a1a);
+	border: 3px solid var(--border-color, #ffffff);
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+	z-index: 2;
+}
+
+.post-emoji-badge img {
+	width: 36px;
+	height: 36px;
+}
+
+/* Caso 1: imagen + emoji → badge montado sobre el borde inferior */
+.post-cover.has-image.has-emoji {
+	margin-bottom: 5rem;
+}
+
+.post-cover.has-image.has-emoji .post-emoji-badge {
+	position: absolute;
+	left: 24px;
+	bottom: -32px;
+}
+
+/* Caso 2 (solo imagen): sin ajustes extra, el badge no existe en el HTML */
+
+/* Caso 3: solo emoji → badge suelto, estático, sin superposición */
+.post-cover.has-emoji:not(.has-image) {
+	display: block;
+}
+
+.post-cover.has-emoji:not(.has-image) .post-emoji-badge {
+	position: static;
+}
+
+/* Caso 4 (nada): .post-cover ni siquiera existe en el HTML, no requiere CSS */
+
+.post-card-media {
+	position: relative;
+	width: 160px;
+	height: 160px;
+	flex-shrink: 0;
+	align-self: center;
+}
+
+.post-card-cover {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	border-radius: 8px;
+}
+
+.post-card-emoji-only {
+	width: 64px;
+	height: 64px;
+	flex-shrink: 0;
+	align-self: center;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	background: var(--background-color);
+	border: 3px solid var(--primary-color);
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+
+.post-card-emoji-only img {
+	width: 36px;
+	height: 36px;
+}
+
+.post-card-emoji {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+
+	width: 64px;
+	height: 64px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	background: var(--background-color);
+	border: 3px solid var(--primary-color);
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+
+.post-card-emoji img {
+	width: 36px;
+	height: 36px;
+}
+
+/* Emojis inline dentro del cuerpo de un post (Twemoji) */
+.post-content img.emoji {
+	display: inline-block;
+	vertical-align: -0.15em;
+	width: 1em;
+	height: 1em;
+	margin: 0;
+}
+
+
+/* ==========================================
+   COMPONENTE: TEXTO + IMAGEN
+========================================== */
+
 .text-image {
 	display: grid;
 	grid-template-columns: minmax(250px, 1fr) 2fr;
@@ -298,6 +428,11 @@ main {
 	line-height: 1.6;
 }
 
+
+/* ==========================================
+   TOGGLE DE TEMA
+========================================== */
+
 #theme-icon {
 	transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -308,7 +443,10 @@ main {
 }
 
 
-/*Detalles*/
+/* ==========================================
+   DETALLES / COLAPSABLES
+========================================== */
+
 details {
 	overflow: hidden;
 }
@@ -318,7 +456,7 @@ summary {
 }
 
 details > *:not(summary) {
-        padding-left: 30px;
+	padding-left: 30px;
 }
 
 .details-wrapper {
@@ -350,7 +488,10 @@ details.closing .details-content {
 }
 
 
-/*Tablas*/
+/* ==========================================
+   TABLAS
+========================================== */
+
 .table-anchor {
 	scroll-margin-top: 100px;
 }
@@ -361,7 +502,6 @@ table {
 	border-collapse: collapse;
 	background-color: var(--background-color);
 	color: var(--primary-color);
-	/*border: var(--border-width) solid var(--primary-color);*/
 	border-radius: 0px;
 	overflow: hidden;
 }
@@ -424,27 +564,13 @@ tbody tr:hover {
 	border-radius: 6px;
 }
 
-.table-caption {
-	text-align: center;
-	font-size: 0.9em;
-	color: var(--secondary-color);
-	margin-top: 0.5em;
-}
 
-.equation-number {
-	text-align: center;
-	font-size: 0.9em;
-	color: var(--secondary-color);
-	margin-top: 0.5em;
-}
-
-.figure-caption {
-	text-align: center;
-	font-size: 0.9em;
-	color: var(--secondary-color);
-	margin-top: 0.5em;
-}
-
+/* ==========================================
+   REFERENCIAS: ECUACIONES, FIGURAS, TABLAS, CÓDIGO
+========================================== */
+.equation-number,
+.figure-caption,
+.table-caption,
 .code-caption {
 	text-align: center;
 	font-size: 0.9em;
@@ -452,8 +578,37 @@ tbody tr:hover {
 	margin-top: 0.5em;
 }
 
+.equation-content {
+	width: 100%;
+	overflow-x: auto;
+	height: auto;
+	overflow-y: hidden;
+	scrollbar-gutter: stable;
+	-webkit-overflow-scrolling: touch;
+}
 
-/*Alerta de idioma*/
+.equation-content > * {
+	min-width: max-content;
+}
+
+.equation-content::-webkit-scrollbar {
+	height: 5px;
+}
+
+.equation-content::-webkit-scrollbar-track {
+	background: var(--base-color);
+}
+
+.equation-content::-webkit-scrollbar-thumb {
+	background: var(--primary-color);
+	border-radius: 6px;
+}
+
+
+/* ==========================================
+   MODAL DE SELECCIÓN DE IDIOMA
+========================================== */
+
 .lang-modal-overlay {
 	position: fixed;
 	inset: 0;
@@ -488,71 +643,6 @@ tbody tr:hover {
 	display: flex;
 	flex-direction: column;
 	gap: var(--gap-sm);
-}
-
-.lang-modal-list a {
-	display: block;
-	padding: 0.5rem 1rem;
-	border: 1px solid currentColor;
-	border-radius: 4px;
-	text-decoration: none;
-	color: inherit;
-}
-
-.lang-modal-list a:hover {
-	background: var(--quaternary-color);
-	color: var(--primary-color);
-}
-
-.lang-modal-close {
-	position: absolute;
-	top: var(--gap-sm);
-	right: var(--gap-sm);
-	background: none;
-	border: none;
-	font-size: 1rem;
-	cursor: pointer;
-	color: var(--secondary-color);
-	transition: color var(--transition-speed);
-}
-
-.lang-modal-close:hover {
-	color: var(--primary-color);
-}
-
-.lang-modal-lang {
-	font-weight: bold;
-	font-variant: small-caps;
-	font-size: 0.85em;
-	color: var(--primary-color);
-}
-
-.lang-modal-title {
-	font-style: italic;
-	color: var(--secondary-color);
-	font-family: var(--font-body);
-}
-
-.lang-modal-list a {
-	display: flex;
-	align-items: center;
-	gap: var(--gap-sm);
-	padding: var(--gap-sm) var(--gap-md);
-	border: 1px solid var(--tertiary-color);
-	border-radius: 4px;
-	text-decoration: none;
-	color: var(--secondary-color);
-	background: var(--base-color);
-	transition: background var(--transition-speed), color var(--transition-speed);
-}
-
-.lang-modal-flag {
-	width: 20px;
-	height: 14px;
-	object-fit: cover;
-	flex-shrink: 0;
-	border: 1px solid var(--tertiary-color);
-	border-radius: 3px;
 }
 
 .lang-modal-list a {
@@ -592,8 +682,45 @@ tbody tr:hover {
 	transform: scaleX(1);
 }
 
+.lang-modal-flag {
+	width: 20px;
+	height: 14px;
+	object-fit: cover;
+	flex-shrink: 0;
+	border: 1px solid var(--tertiary-color);
+	border-radius: 3px;
+}
 
-/* Colores banderas*/
+.lang-modal-close {
+	position: absolute;
+	top: var(--gap-sm);
+	right: var(--gap-sm);
+	background: none;
+	border: none;
+	font-size: 1rem;
+	cursor: pointer;
+	color: var(--secondary-color);
+	transition: color var(--transition-speed);
+}
+
+.lang-modal-close:hover {
+	color: var(--primary-color);
+}
+
+.lang-modal-lang {
+	font-weight: bold;
+	font-variant: small-caps;
+	font-size: 0.85em;
+	color: var(--primary-color);
+}
+
+.lang-modal-title {
+	font-style: italic;
+	color: var(--secondary-color);
+	font-family: var(--font-body);
+}
+
+/* Colores de acento por idioma (banderas) */
 .lang-modal-list a[data-lang="eo"] {
 	--lang-accent: #009A44; /* verde bandera esperanto */
 }
@@ -602,187 +729,161 @@ tbody tr:hover {
 	--lang-accent: #AA151B; /* rojo bandera española */
 }
 
-.post-section-head {
-	position: relative;
-}
 
-.post-cover {
-	--badge-size: 64px;
-	position: relative;
-	margin-bottom: 3.5rem; /* antes calc(badge/2 + 16px), ahora incluye el offset de .section-title-bg */
-}
-
-/* Caso 4 (nada): .post-cover ni siquiera existe en el HTML, no requiere CSS */
-
-.post-cover-image {
-	display: block;
-	width: 100%;
-	height: 280px;
-	object-fit: cover;
-	border-radius: 8px;
-}
-
-.post-emoji-badge {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 64px;
-	height: 64px;
-	background: var(--bg-color, #1a1a1a);
-	border: 3px solid var(--border-color, #ffffff);
-	border-radius: 12px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-	z-index: 2;
-}
-
-.post-emoji-badge img {
-	width: 36px;
-	height: 36px;
-}
-
-/* Caso 1: imagen + emoji → badge montado sobre el borde inferior */
-.post-cover.has-image.has-emoji {
-	margin-bottom: 5rem; /* espacio extra para que el badge no choque con el título */
-}
-
-.post-cover.has-image.has-emoji .post-emoji-badge {
-	position: absolute;
-	left: 24px;
-	bottom: -32px; /* mitad de la altura del badge: queda "mordiendo" el borde */
-}
-
-.post-section-header {
-	position: relative;
-	padding-left: 24px;
-}
-
-/* Caso 2: solo imagen → sin ajustes extra, el badge no existe en el HTML */
-
-/* Caso 3: solo emoji → badge suelto, estático, sin superposición */
-.post-cover.has-emoji:not(.has-image) {
-	display: block;
-}
-
-.post-cover.has-emoji:not(.has-image) .post-emoji-badge {
-	position: static;
-}
-
-.post-card-media {
-	position: relative;
-	width: 160px;
-	height: 160px;
-	flex-shrink: 0;
-	align-self: center;
-}
-
-.post-card-cover {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	display: block;
-	border-radius: 8px;
-}
-
-.post-card-emoji-only {
-	width: 64px;
-	height: 64px;
-	flex-shrink: 0;
-	align-self: center;
-
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	background: var(--background-color);
-	border: 3px solid var(--primary-color);
-	border-radius: 12px;
-	box-shadow: 0 2px 8px rgba(0,0,0,.25);
-}
-
-.post-card-emoji-only img {
-	width: 36px;
-	height: 36px;
-}
-
-.post-card-emoji {
-	position: absolute;
-	right: 10px;
-	bottom: 10px;
-
-	width: 64px;
-	height: 64px;
-
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	background: var(--background-color);
-	border: 3px solid var(--primary-color);
-	border-radius: 12px;
-	box-shadow: 0 2px 8px rgba(0,0,0,.25);
-}
-
-.post-card-emoji img {
-	width: 36px;
-	height: 36px;
-}
-
-.post-content img.emoji {
-	display: inline-block;
-	vertical-align: -0.15em;
-	width: 1em;
-	height: 1em;
-	margin: 0;
-}
-
-.equation-content {
-	width: 100%;
-	overflow-x: auto;
-	height: auto;
-	overflow-y: hidden;
-	scrollbar-gutter: stable;
-	-webkit-overflow-scrolling: touch;
-}
-
-.equation-content > * {
-	min-width: max-content;
-}
-
-.equation-content::-webkit-scrollbar {
-	height: 5px;
-}
-
-.equation-content::-webkit-scrollbar-track {
-	background: var(--base-color);
-}
-
-.equation-content::-webkit-scrollbar-thumb {
-	background: var(--primary-color);
-	border-radius: 6px;
-}
+/* ==========================================
+   UTILIDADES
+========================================== */
 
 [id] {
 	scroll-margin-top: 100px;
 }
 
+.highlight-flash {
+	position: relative;
+}
+
+.highlight-flash::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	bottom: -2px;
+	width: 80px;
+	height: 2px;
+	background-color: var(--secondary-color);
+	transform: translateX(-50%) scaleX(0);
+	transform-origin: center;
+	animation: highlightUnderline 1.8s ease-out;
+}
+
+@keyframes highlightUnderline {
+	0% {
+		transform: translateX(-50%) scaleX(0);
+	}
+
+	15% {
+		transform: translateX(-50%) scaleX(1);
+	}
+
+	70% {
+		transform: translateX(-50%) scaleX(1);
+	}
+
+	100% {
+		transform: translateX(-50%) scaleX(0);
+	}
+}
+
+
+/* ==========================================
+   BLOQUES DE CÓDIGO (highlight.js)
+   ⚠️ Estas reglas usan `.post-content pre`, es decir,
+   dependen de que .post-content sea el CUERPO COMPLETO
+   de un post (la versión de post.css), no la tarjeta de
+   la lista (la versión de este archivo, más arriba).
+   Considerar mover esta sección entera a post.css si
+   los bloques de código solo aparecen dentro de posts.
+========================================== */
+
 .code-language {
 	display: inline-block;
-
 	padding: 0.25rem 0.75rem;
-
 	font-family: var(--font-ui);
 	font-size: 0.85rem;
 	font-weight: 600;
-
 	background: var(--secondary-color);
 	color: var(--background-color);
-
 	border-radius: 0.5rem 0.5rem 0 0;
-
 	margin-bottom: -2px;
 }
 
-.code-language + pre {
-	margin-top: -1px;
-
+.code-language {
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.25rem 0.75rem;
+	font-family: var(--font-ui);
+	font-size: 0.85rem;
+	font-weight: 600;
+	background: var(--secondary-color);
+	color: var(--background-color);
+	border-radius: 0.5rem 0.5rem 0 0;
+	margin-bottom: -2px;
 }
+
+.post-content pre {
+	background-color: var(--primary-color) !important;
+	padding: 1rem;
+	border-top-right-radius: 8px;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+	overflow-x: auto;
+	margin-bottom: 1rem;
+	position: relative;
+	display: flex;
+	--gutter-width: 2rem;
+	--gutter-gap: 0.75rem;
+}
+
+.post-content pre code {
+	font-family: 'Courier New', monospace;
+	color: var(--background-color);
+	font-size: 1rem;
+	line-height: 1.5;
+	display: block;
+	min-width: 0;
+	overflow-x: auto;
+}
+
+.post-content pre.has-line-numbers code {
+	padding-left: calc(var(--gutter-width) + var(--gutter-gap));
+}
+
+.post-content pre .line-numbers-rows {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	bottom: 1rem;
+	width: var(--gutter-width);
+	border-right: 1px solid var(--tertiary-color);
+	-webkit-user-select: none;
+	user-select: none;
+	text-align: right;
+	font-family: 'Courier New', monospace;
+	font-size: 0.95rem;
+	line-height: 1.5;
+	opacity: 0.5;
+	padding: 1em;
+}
+
+.post-content pre .line-numbers-rows span {
+	display: block;
+	counter-increment: line-number;
+	padding-right: 0.6em;
+	color: var(--tertiary-color);
+}
+
+.post-content pre .line-numbers-rows span::before {
+	content: counter(line-number);
+}
+
+.copy-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: inherit;
+	opacity: 0.75;
+	padding: 4px;
+	display: flex;
+	align-items: center;
+	border-radius: 4px;
+	transition: opacity var(--transition-speed);
+}
+
+.copy-button:hover {
+	opacity: 1;
+}
+
+.copy-button i {
+	font-size: 16px;
+}
+

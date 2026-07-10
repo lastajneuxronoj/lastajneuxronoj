@@ -1033,6 +1033,10 @@ tbody tr:hover {
 
 }
 
+.level-1 {
+	width: 80px;
+}
+
 .level-2 {
 	width: 60px;
 }

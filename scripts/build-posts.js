@@ -455,7 +455,8 @@ async function main() {
 			const htmlContent = renderMarkdownContent(
 				md,
 				lang,
-				translations
+				translations,
+				post.title[lang]
 			);
 
 			const readingTime = estimateReadingTime(htmlContent);
@@ -555,7 +556,8 @@ async function buildStaticPages(pages, translations) {
 			const htmlContent = renderMarkdownContent(
 				md,
 				lang,
-				translations
+				translations,
+				page.section_title?.[lang] || ""
 			);
 
 			const coverImage = await findCoverImage(page.id);
@@ -607,7 +609,7 @@ function renderEmojiImg(emoji) {
 	});
 }
 
-function renderMarkdownContent(md, lang, translations) {
+function renderMarkdownContent(md, lang, translations, pageTitle = "") {
 
 	// Extensiones Markdown propias
 	let processedMarkdown = preprocessCallouts(md, translations[lang]);
@@ -625,7 +627,8 @@ function renderMarkdownContent(md, lang, translations) {
 		html,
 		referenceMap,
 		lang,
-		translations
+		translations,
+		pageTitle
 	);
 
 	// Envolver tablas
@@ -661,7 +664,7 @@ function renderMarkdownContent(md, lang, translations) {
 	html = highlightCodeBlocks(html);
 	html = addLineNumbers(html);
 
-	html = processHeadings(html, lang, translations);
+	html = processHeadings(html, lang, translations, pageTitle);
 
 	return html;
 }
@@ -866,20 +869,24 @@ function escapeJSON(text = "") {
 
 async function renderPage({ type, data }) {
 	
-	// Renderizar la página como post
-	if (type === "post") {
+			// Renderizar la página como post
+			if (type === "post") {
 			const template = await loadTemplate("post.html");
-
+			
 			const meta = [
 				data.post.date,
 				data.post.type?.[data.lang],
 				data.post.author?.[data.lang]
 			]
-
 			.filter(Boolean)
 			.join(" | ");
-
+		
 			const url = `${SITE_URL}blog/${data.post.number}-${data.lang}.html`;
+		
+			const titleId = slugify(data.post.title[data.lang], {
+				lower: true,
+				strict: true
+			});
 
 			const seo = buildSEOData({
 				title: data.post.title[data.lang],
@@ -940,6 +947,7 @@ async function renderPage({ type, data }) {
 				lang: data.lang,
 				title: buildPageTitle(data.post.title[data.lang]),
 				postTitle: data.post.title[data.lang],
+				titleId,
 				cover: coverHtml,
 				number: data.post.number,
 				date: data.post.date,
@@ -958,16 +966,20 @@ async function renderPage({ type, data }) {
 
 		// Renderizar la página como page
 		if (type === "page") {
-			const template = await loadTemplate(`${data.page.template || "page"}.html`
-);
-		
+			const template = await loadTemplate(`${data.page.template || "page"}.html`);
+
 			const url = `${SITE_URL}${data.page.id}-${data.lang}.html`;
-		
+
 			const langMap = {};
-		
 			data.availableLangs.forEach(lang => {
 				langMap[lang] = `/${data.page.id}-${lang}.html`;
 			});
+		
+			const sectionTitle = data.page.section_title?.[data.lang] || "";
+		
+			const titleId = sectionTitle
+				? slugify(sectionTitle, { lower: true, strict: true })
+				: "";
 		
 			const seo = buildSEOData({
 				title: data.page.title[data.lang],
@@ -994,14 +1006,11 @@ async function renderPage({ type, data }) {
 				title: buildPageTitle(data.page.title[data.lang]),
 				cover: coverHtml,
 				...seo,
-			
 				langMap: JSON.stringify(langMap),
-			
 				body: data.htmlContent,
-			
 				section_bg: data.page.section_bg?.[data.lang] || "",
-				section_title: data.page.section_title?.[data.lang] || "",
-			
+				section_title: sectionTitle,
+				titleId,
 				backToHome: data.translations[data.lang].backToHome
 			});
 		}
@@ -1060,10 +1069,19 @@ function countWords(html) {
 		: 0;
 }
 
-function processHeadings(html, lang, translations = {}) {
+function processHeadings(html, lang, translations = {}, pageTitle = "") {
 
 	const $ = cheerio.load(html);
 	const toc = [];
+
+	if (pageTitle) {
+		const titleId = slugify(pageTitle, { lower: true, strict: true });
+		toc.push({
+			text: pageTitle,
+			id: titleId,
+			level: 1
+		});
+	}
 
 	$("h1, h2, h3, h4").each((i, el) => {
 
@@ -1086,19 +1104,11 @@ function processHeadings(html, lang, translations = {}) {
 
 	const tocLabel = translations?.[lang]?.ui?.toc?.title || "Contenido";
 
-	const tocHtml = `
-	<nav class="toc-sidebar" aria-label="${tocLabel}">
-		<span class="toc-label">${tocLabel}</span>
-		${toc.map(item => `
-			
-				<a href="#${item.id}"
-				class="toc-item level-${item.level}"
-				data-title="${item.text}"
-				data-target="${item.id}">
-			</a>
-		`).join("")}
-	</nav>
-	`;
+	const tocItems = toc.map(item =>
+		`<a href="#${item.id}" class="toc-item level-${item.level}" data-title="${item.text}" data-target="${item.id}"></a>`
+	).join("");
+
+	const tocHtml = `<nav class="toc-sidebar" aria-label="${tocLabel}"><span class="toc-label">${tocLabel}</span>${tocItems}</nav>`;
 
 	if (toc.length > 0) {
 		$("body").append(tocHtml);

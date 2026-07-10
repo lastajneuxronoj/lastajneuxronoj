@@ -6,6 +6,11 @@
 			"header_about": "[ Sobre mí ]",
 			"lang_code": "[ES]"
 		},
+		"ui": {
+			"toc": {
+				"title": "Contenido"
+			}
+		},
 		"posts": {
 			"label_bg": "POSTS",
 			"label": "> PUBLICACIONES",
@@ -57,6 +62,11 @@
 			"header_home": "[ Ĉefpaĝo ]",
 			"header_about": "[ Pri mi ]",
 			"lang_code": "[EO]"
+		},
+		"ui": {
+			"toc": {
+				"title": "Enhavo"
+			}
 		},
 		"posts": {
 			"label_bg": "POSTS",

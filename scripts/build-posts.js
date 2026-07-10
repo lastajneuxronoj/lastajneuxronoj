@@ -661,7 +661,7 @@ function renderMarkdownContent(md, lang, translations) {
 	html = highlightCodeBlocks(html);
 	html = addLineNumbers(html);
 
-	html = processHeadings(html);
+	html = processHeadings(html, lang, translations);
 
 	return html;
 }
@@ -1060,35 +1060,38 @@ function countWords(html) {
 		: 0;
 }
 
-function processHeadings(html) {
+function processHeadings(html, lang, translations = {}) {
 
 	const $ = cheerio.load(html);
 	const toc = [];
-	
-	$("h2, h3, h4").each((i, el) => {
-	
+
+	$("h1, h2, h3, h4").each((i, el) => {
+
 		const text = $(el).text();
-	
+
 		const id = slugify(text, {
 			lower: true,
 			strict: true
 		});
-	
+
 		$(el).attr("id", id);
-	
+
 		toc.push({
 			text,
 			id,
 			level: Number(el.tagName.substring(1))
 		});
-	
+
 	});
 
+	const tocLabel = translations?.[lang]?.ui?.toc?.title || "Contenido";
+
 	const tocHtml = `
-	<nav class="toc-sidebar">
+	<nav class="toc-sidebar" aria-label="${tocLabel}">
+		<span class="toc-label">${tocLabel}</span>
 		${toc.map(item => `
-			<a
-				href="#${item.id}"
+			
+				<a href="#${item.id}"
 				class="toc-item level-${item.level}"
 				data-title="${item.text}"
 				data-target="${item.id}">
@@ -1097,10 +1100,10 @@ function processHeadings(html) {
 	</nav>
 	`;
 
-		if (toc.length > 0) {
+	if (toc.length > 0) {
 		$("body").append(tocHtml);
 	}
-	
+
 	return $.html();
 
 }

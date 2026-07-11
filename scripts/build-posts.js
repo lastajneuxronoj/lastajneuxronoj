@@ -583,6 +583,14 @@ async function buildCategoryPages(posts, translations) {
 				lang,
 				type: "CollectionPage"
 			});
+			
+			const rssLink = `
+				<link
+					rel="alternate"
+					type="application/rss+xml"
+					title="Lastaj Neŭronoj - ${lang}"
+					href="/rss-${lang}.xml">
+			`;
 
 			const html = renderTemplate(template, {
 				lang,
@@ -593,6 +601,7 @@ async function buildCategoryPages(posts, translations) {
 				categorySlug,
 				categoryAvailableLangs: [...categoryLangs[categorySlug]].join(","),
 				titleId: slugify(categoryName, { lower: true, strict: true }),
+				rssLink,
 			});
 
 			const outDir = path.join(ROOT, "categories");

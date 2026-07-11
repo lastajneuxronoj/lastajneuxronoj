@@ -1,0 +1,33 @@
+<svg id="logo-mark"
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox="0 0 200 200">
+
+	<!-- Fondo blanco -->
+	<circle
+		cx="100"
+		cy="100"
+		r="85"
+		fill="white"/>
+
+	<!-- Borde -->
+	<circle
+		cx="100"
+		cy="100"
+		r="85"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="6"/>
+
+	<!-- Letras -->
+	<text
+		x="100"
+		y="135"
+		text-anchor="middle"
+		font-family="Playfair Display, serif"
+		font-style="italic"
+		font-size="105"
+		fill="currentColor">
+		LN
+	</text>
+
+</svg>

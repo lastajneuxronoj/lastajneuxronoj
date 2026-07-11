@@ -20,7 +20,6 @@ body.dark, html.dark {
 
 /* Barra superior */
 .top-bar {
-	display: none;
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -46,7 +45,7 @@ body.dark, html.dark {
 	transition: color 0.2s;
 }
 
-.top-bar a::after {
+.top-bar a:not(.logo-svg-link)::after {
 	content: "";
 	position: absolute;
 	left: 0;
@@ -59,12 +58,14 @@ body.dark, html.dark {
 	transition: transform 0.2s ease-out;
 }
 
-.top-bar a:hover::after {
+.top-bar a:not(.logo-svg-link):hover::after {
 	transform: scaleX(1);
 }
 
 /* Asegurarse de que el logo y navegación no se desborden */
 .logo {
+	display: flex;
+	align-items: center;
 	font-family: 'Playfair Display', serif;
 	font-style:italic;
 	font-weight: bold;
@@ -73,6 +74,12 @@ body.dark, html.dark {
 	color: var(--primary-color);
 }
 
+.logo-svg {
+	width: 35px;
+	height: 38px;
+	display: block;
+	margin-right: 0.5rem;
+}
 
 
 .header-links {

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title><![CDATA[Lastaj Neŭronoj]]></title>
+        <description><![CDATA[Blogo pri sciencdisvastigo, lingvoj, tradukoj kaj personaj tekstoj.]]></description>
+        <link>https://lastajneuxronoj.github.io</link>
+        <image>
+            <url>https://lastajneuxronoj.github.io/images/logo.png</url>
+            <title>Lastaj Neŭronoj</title>
+            <link>https://lastajneuxronoj.github.io</link>
+        </image>
+        <generator>Lastaj Neŭronoj Static Generator</generator>
+        <lastBuildDate>Sat, 11 Jul 2026 04:45:23 GMT</lastBuildDate>
+        <atom:link href="https://lastajneuxronoj.github.io/rss-eo.xml" rel="self" type="application/rss+xml"/>
+        <pubDate>Sat, 11 Jul 2026 04:45:23 GMT</pubDate>
+        <copyright><![CDATA[Lastaj Neŭronoj]]></copyright>
+        <language><![CDATA[eo]]></language>
+        <managingEditor><![CDATA[Tomás]]></managingEditor>
+        <webMaster><![CDATA[Tomás]]></webMaster>
+        <ttl>60</ttl>
+        <item>
+            <title><![CDATA[Provo 2]]></title>
+            <description><![CDATA[Ĉi tio estas la dua prova artikolo en Esperanto: Maecenas in eleifend tortor. Fusce suscipit sapien ut euismod ultrices. Nam nec accumsan eros. Ut sed facilisis eros. Ut eget purus consequat nibh fermentum tempus ac sit amet neque. Proin vitae vulputate tellus. Nulla ac venenatis augue. Nam ac dolor nibh. Morbi at auctor ipsum, in tincidunt ipsum]]></description>
+            <link>https://lastajneuxronoj.github.io/blog/002-eo.html</link>
+            <guid isPermaLink="false">https://lastajneuxronoj.github.io/blog/002-eo.html</guid>
+            <dc:creator><![CDATA[Aŭtoro]]></dc:creator>
+            <pubDate>Mon, 14 Jul 2025 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Provo 1: Tre longa titolo en esperanto, kiu estas utila por kontroli la interfacon]]></title>
+            <description><![CDATA[
+				<img
+					src="https://lastajneuxronoj.github.io/covers/001.webp"
+					alt=""
+					style="max-width:100%;height:auto;">
+				<p>Ĉi tio estas prova artikolo en Esperanto. Maecenas in eleifend tortor. Fusce suscipit sapien ut euismod ultrices. Nam nec accumsan eros. Ut sed facilisis eros. Ut eget purus consequat nibh fermentum tempus ac sit amet neque. Proin vitae vulputate tellus. Nulla ac venenatis augue. Nam ac dolor nibh. Morbi at auctor ipsum, in tincidunt ipsum. </p>
+			  ]]></description>
+            <link>https://lastajneuxronoj.github.io/blog/001-eo.html</link>
+            <guid isPermaLink="false">https://lastajneuxronoj.github.io/blog/001-eo.html</guid>
+            <dc:creator><![CDATA[Aŭtoro]]></dc:creator>
+            <pubDate>Mon, 14 Jul 2025 00:00:00 GMT</pubDate>
+            <enclosure url="https://lastajneuxronoj.github.io/covers/001.webp" length="0" type="image/webp"/>
+        </item>
+        <item>
+            <title><![CDATA[Provo 0]]></title>
+            <description><![CDATA[Priskribo 0: Maecenas in eleifend tortor. Fusce suscipit sapien ut euismod ultrices. Nam nec accumsan eros. Ut sed facilisis eros. Ut eget purus consequat nibh fermentum tempus ac sit amet neque. Proin vitae vulputate tellus. Nulla ac venenatis augue. Nam ac dolor nibh. Morbi at auctor ipsum, in tincidunt ipsum]]></description>
+            <link>https://lastajneuxronoj.github.io/blog/000-eo.html</link>
+            <guid isPermaLink="false">https://lastajneuxronoj.github.io/blog/000-eo.html</guid>
+            <dc:creator><![CDATA[Aŭtoro]]></dc:creator>
+            <pubDate>Sun, 13 Jul 2025 00:00:00 GMT</pubDate>
+        </item>
+    </channel>
+</rss>

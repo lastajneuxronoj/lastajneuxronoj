@@ -30,65 +30,183 @@ async function main() {
 
 }
 
-async function buildSitemap(posts) {
-    const urls = [];
+async function buildSitemap(posts, pages) {
 
-    // Página principal
-    urls.push(`
-        <url>
-            <loc>${SITE_URL}</loc>
-        </url>
-    `);
+	const urls = [];
 
-    // Posts generados
-    posts.forEach(post => {
-        Object.keys(post.file || {}).forEach(lang => {
-            urls.push(`
-        <url>
-            <loc>${SITE_URL}blog/${post.number}-${lang}.html</loc>
-            <lastmod>${post.date}</lastmod>
-        </url>
-            `);
-        });
-    });
+	const siteUrl =
+		SITE_URL.replace(/\/$/, "");
 
 
-    // Páginas estáticas adicionales
-    try {
-        const extraPages = JSON.parse(
-            await fs.readFile(SITEMAP_EXTRA_PATH, "utf-8")
-        );
+	// =========================
+	// Página principal
+	// =========================
 
-        extraPages.forEach(page => {
-            urls.push(`
-        <url>
-            <loc>${SITE_URL}${page.path.replace(/^\//, "")}</loc>
-            ${page.lastmod ? `<lastmod>${page.lastmod}</lastmod>` : ""}
-        </url>
-            `);
-        });
-
-    } catch {
-        console.log("⚠ No se encontró sitemap-extra.json");
-    }
+	urls.push(`
+		<url>
+			<loc>${siteUrl}/</loc>
+		</url>
+	`);
 
 
-    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset 
-    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	// =========================
+	// Índice del blog
+	// =========================
+
+	urls.push(`
+		<url>
+			<loc>${siteUrl}/blog/</loc>
+		</url>
+	`);
+
+
+	// =========================
+	// Posts generados
+	// =========================
+
+	posts.forEach(post => {
+
+		Object.keys(post.file || {})
+			.forEach(lang => {
+
+				urls.push(`
+		<url>
+			<loc>${siteUrl}/blog/${post.number}-${lang}.html</loc>
+			<lastmod>${post.date}</lastmod>
+		</url>
+				`);
+
+			});
+
+	});
+
+
+	// =========================
+	// Páginas estáticas
+	// =========================
+
+	pages.forEach(page => {
+
+		Object.keys(page.file || {})
+			.forEach(lang => {
+
+				urls.push(`
+		<url>
+			<loc>${siteUrl}/${page.id}-${lang}.html</loc>
+		</url>
+				`);
+
+			});
+
+	});
+
+
+	// =========================
+	// Páginas de categorías
+	// =========================
+
+	const categoriesByLang = {};
+
+	posts.forEach(post => {
+
+		if (!post.category)
+			return;
+
+
+		Object.keys(post.file || {})
+			.forEach(lang => {
+
+				categoriesByLang[lang] =
+					categoriesByLang[lang] || new Set();
+
+				categoriesByLang[lang]
+					.add(post.category);
+
+			});
+
+	});
+
+
+	for (const [lang, categories]
+		of Object.entries(categoriesByLang)) {
+
+
+		for (const category of categories) {
+
+			urls.push(`
+		<url>
+			<loc>${siteUrl}/categories/${category}-${lang}.html</loc>
+		</url>
+			`);
+
+		}
+
+	}
+
+
+	// =========================
+	// URLs adicionales manuales
+	// =========================
+
+	try {
+
+		const extraPages = JSON.parse(
+			await fs.readFile(
+				SITEMAP_EXTRA_PATH,
+				"utf-8"
+			)
+		);
+
+
+		extraPages.forEach(page => {
+
+			urls.push(`
+		<url>
+			<loc>${siteUrl}/${page.path.replace(/^\//, "")}</loc>
+			${page.lastmod
+				? `<lastmod>${page.lastmod}</lastmod>`
+				: ""}
+		</url>
+			`);
+
+		});
+
+
+	} catch {
+
+		console.log(
+			"⚠ No se encontró sitemap-extra.json"
+		);
+
+	}
+
+
+	// =========================
+	// Crear XML
+	// =========================
+
+	const sitemap =
+`<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 ${urls.join("\n")}
 
 </urlset>
 `;
 
-    await fs.writeFile(
-        SITEMAP_PATH,
-        sitemap.trim(),
-        "utf-8"
-    );
 
-    console.log(`✔ ${SITEMAP_PATH}`);
+	await fs.writeFile(
+		SITEMAP_PATH,
+		sitemap.trim(),
+		"utf-8"
+	);
+
+
+	console.log(
+		`✔ ${SITEMAP_PATH}`
+	);
+
 }
 
 module.exports = {

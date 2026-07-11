@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title><![CDATA[Lastaj Neŭronoj]]></title>
+        <description><![CDATA[Blog sobre divulgación científica,  idiomas, traducciones y textos personales]]></description>
+        <link>https://lastajneuxronoj.github.io</link>
+        <image>
+            <url>https://lastajneuxronoj.github.io/images/logo.png</url>
+            <title>Lastaj Neŭronoj</title>
+            <link>https://lastajneuxronoj.github.io</link>
+        </image>
+        <generator>Lastaj Neŭronoj Static Generator</generator>
+        <lastBuildDate>Sat, 11 Jul 2026 04:45:23 GMT</lastBuildDate>
+        <atom:link href="https://lastajneuxronoj.github.io/rss-es.xml" rel="self" type="application/rss+xml"/>
+        <pubDate>Sat, 11 Jul 2026 04:45:23 GMT</pubDate>
+        <copyright><![CDATA[Lastaj Neŭronoj]]></copyright>
+        <language><![CDATA[es]]></language>
+        <managingEditor><![CDATA[Tomás]]></managingEditor>
+        <webMaster><![CDATA[Tomás]]></webMaster>
+        <ttl>60</ttl>
+        <item>
+            <title><![CDATA[Provo 3]]></title>
+            <description><![CDATA[Este es un post de prueba en español.]]></description>
+            <link>https://lastajneuxronoj.github.io/blog/003-es.html</link>
+            <guid isPermaLink="false">https://lastajneuxronoj.github.io/blog/003-es.html</guid>
+            <category><![CDATA[Shaviano]]></category>
+            <dc:creator><![CDATA[Autor]]></dc:creator>
+            <pubDate>Mon, 14 Jul 2025 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Prueba 0]]></title>
+            <description><![CDATA[Descripción 0]]></description>
+            <link>https://lastajneuxronoj.github.io/blog/000-es.html</link>
+            <guid isPermaLink="false">https://lastajneuxronoj.github.io/blog/000-es.html</guid>
+            <pubDate>Sun, 13 Jul 2025 00:00:00 GMT</pubDate>
+        </item>
+    </channel>
+</rss>

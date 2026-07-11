@@ -39,7 +39,10 @@ const cheerio = require("cheerio");
 const hljs = require("highlight.js");
 const slugify = require('slugify');
 const { preprocessCallouts } = require("./callouts");
-
+const { buildSitemap } = require("./build-sitemap");
+const buildRSS = require("./build-rss");
+const { LANGUAGE_NAMES } = require("./config");
+const findCoverImage = require("./utils/find-cover-image");
 
 const ROOT = path.resolve(__dirname, "..");
 
@@ -357,66 +360,6 @@ function renderTemplate(template, data) {
 	return out;
 }
 
-async function buildSitemap(posts) {
-	const urls = [];
-
-	// Página principal
-	urls.push(`
-		<url>
-			<loc>${SITE_URL}</loc>
-		</url>
-	`);
-
-	// Posts generados
-	posts.forEach(post => {
-		Object.keys(post.file || {}).forEach(lang => {
-			urls.push(`
-		<url>
-			<loc>${SITE_URL}blog/${post.number}-${lang}.html</loc>
-			<lastmod>${post.date}</lastmod>
-		</url>
-			`);
-		});
-	});
-
-
-	// Páginas estáticas adicionales
-	try {
-		const extraPages = JSON.parse(
-			await fs.readFile(SITEMAP_EXTRA_PATH, "utf-8")
-		);
-
-		extraPages.forEach(page => {
-			urls.push(`
-		<url>
-			<loc>${SITE_URL}${page.path.replace(/^\//, "")}</loc>
-			${page.lastmod ? `<lastmod>${page.lastmod}</lastmod>` : ""}
-		</url>
-			`);
-		});
-
-	} catch {
-		console.log("⚠ No se encontró sitemap-extra.json");
-	}
-
-
-	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset 
-	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-${urls.join("\n")}
-
-</urlset>
-`;
-
-	await fs.writeFile(
-		SITEMAP_PATH,
-		sitemap.trim(),
-		"utf-8"
-	);
-
-	console.log(`✔ ${SITEMAP_PATH}`);
-}
 
 async function main() {
 	const posts = JSON.parse(await fs.readFile(POSTS_JSON_PATH, "utf-8"));
@@ -509,7 +452,7 @@ async function main() {
 	);
 	generatedPages += await buildCategoryPages(posts, translations);
 
-	await buildSitemap(posts);
+	await buildSitemap(posts, pages);
 
 	generateStatistics(
 	posts,
@@ -590,6 +533,12 @@ async function buildStaticPages(pages, translations) {
 			console.log(`✔ Página generada: ${outPath}`);
 
 		}
+	}
+		//Generar RSS
+
+
+	for (const language of Object.keys(translations)) {
+		await buildRSS(language);
 	}
 
 	return generated;
@@ -902,21 +851,6 @@ function renderCover({ image, emoji }) {
 const COVERS_DIR = path.join(ROOT, "covers");
 const COVER_EXTENSIONS = ["jpg", "jpeg", "png", "webp"];
 
-async function findCoverImage(id) {
-	for (const ext of COVER_EXTENSIONS) {
-		const filePath = path.join(COVERS_DIR, `${id}.${ext}`);
-
-		try {
-			await fs.access(filePath);
-			return `covers/${id}.${ext}`; // ruta relativa, para usar en src/og:image
-		} catch {
-			// no existe con esta extensión, prueba la siguiente
-		}
-	}
-
-	return null; // no hay portada para este id
-}
-
 function escapeHTML(text = "") {
 	return text
 		.replace(/&/g, "&amp;")
@@ -933,7 +867,18 @@ function escapeJSON(text = "") {
 }
 
 async function renderPage({ type, data }) {
-	
+
+	const languageName =
+		LANGUAGE_NAMES[data.lang] || data.lang;
+
+	const rssLink = `
+		<link
+			rel="alternate"
+			type="application/rss+xml"
+			title="Lastaj Neŭronoj - ${languageName}"
+			href="/rss-${data.lang}.xml">
+	`;
+
 			// Renderizar la página como post
 			if (type === "post") {
 			const template = await loadTemplate("post.html");
@@ -1026,6 +971,7 @@ async function renderPage({ type, data }) {
 				availableLangs: data.availableLangs.join(","),
 				titles: JSON.stringify(titles).replace(/"/g, "&quot;"),
 				...seo,
+				rssLink,
 			});
 		}
 
@@ -1078,7 +1024,8 @@ async function renderPage({ type, data }) {
 				titleId,
 				pageId: data.page.id,
 				availableLangs: data.availableLangs.join(","),
-				backToHome: data.translations[data.lang].backToHome
+				backToHome: data.translations[data.lang].backToHome,
+				rssLink,
 			});
 		}
 

@@ -19,6 +19,24 @@
 	<link rel="alternate" hreflang="eo" href="https://lastajneuxronoj.github.io/">
 	<link rel="alternate" hreflang="es" href="https://lastajneuxronoj.github.io/">
 	{{rssLink}}
+	<!--Importante dejar antes de los estilos-->
+	<script>
+	(() => {
+		const savedTheme = localStorage.getItem("theme");
+	
+		const theme =
+			savedTheme ||
+			(
+				window.matchMedia("(prefers-color-scheme: dark)").matches
+					? "dark"
+					: "light"
+			);
+	
+		if (theme === "dark") {
+			document.documentElement.classList.add("dark");
+		}
+	})();
+	</script>
 	<!-- Estilos -->
 	<link rel="stylesheet" href="/style.css" />
 	<link rel="stylesheet" href="/post.css" />
@@ -27,15 +45,6 @@
 
 	<!-- Scripts -->
 	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-	<script>
-		// Aplicar el tema almacenado al cargar la página
-		(function () {
-			const theme = localStorage.getItem("theme") || "light";
-			if (theme === "dark") {
-				document.documentElement.classList.add("dark");
-			}
-		})();
-	</script>
 	<script>
 		(function () {
 			const lang = localStorage.getItem("lang") || "eo";

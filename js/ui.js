@@ -112,7 +112,15 @@ function setupMenu() {
 }
 
 function setupTheme() {
-	const theme = localStorage.getItem("theme") || "light";
+	const savedTheme = localStorage.getItem("theme");
+
+	const theme =
+		savedTheme ||
+		(
+			window.matchMedia("(prefers-color-scheme: dark)").matches
+				? "dark"
+				: "light"
+		);
 
 	const body = document.body;
 	const html = document.documentElement;

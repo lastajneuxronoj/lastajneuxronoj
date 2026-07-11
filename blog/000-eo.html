@@ -30,6 +30,25 @@
 			href="/rss-eo.xml">
 	
 
+		<!--Importante dejar antes de los estilos-->
+		<script>
+		(() => {
+			const savedTheme = localStorage.getItem("theme");
+		
+			const theme =
+				savedTheme ||
+				(
+					window.matchMedia("(prefers-color-scheme: dark)").matches
+						? "dark"
+						: "light"
+				);
+		
+			if (theme === "dark") {
+				document.documentElement.classList.add("dark");
+			}
+		})();
+		</script>
+
 		<!--<link rel="icon" href="/favicon.ico">-->
 
 		<!-- Styles -->

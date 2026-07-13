@@ -18,7 +18,7 @@ function loadPosts() {
 
 	const categorySlug = document.body.dataset.category || null;
 
-	fetch("json/posts.json")
+	fetch("/json/posts.json")
 	.then(res => res.json())
 	.then(posts => {
 

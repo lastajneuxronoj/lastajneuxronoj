@@ -78,15 +78,11 @@ function renderResults(matches) {
 
 
 	for (const item of matches) {
+		const link = document.createElement("a");
 
-		const link =
-			document.createElement("a");
+		link.href = item.url;
 
-		link.href =
-			item.url;
-
-		link.className =
-			"search-result";
+		link.className = "search-result";
 
 
 		link.innerHTML =
@@ -127,13 +123,9 @@ function renderResults(matches) {
 
                     </div>
                     `
-
                     :
-
                     item.emoji
-
                     ?
-
                     `
                     <div class="post-card-emoji-only">
 
@@ -141,60 +133,47 @@ function renderResults(matches) {
 
                     </div>
                     `
-
                     :
-
                     ""
                 }
-
-
 			</div>
 			`;
-
-
 		results.appendChild(link);
-
 	}
-
 }
 
 
 
 function search(query) {
-	query =
-		query
-			.trim()
-			.toLowerCase();
+	query = normalizeSearchText(query.trim());
 
 	if (!query) {
 		results.innerHTML = "";
 		return;
 	}
 
-	const normalizedQuery =
-		query.replace(/^0+/, "");
+	const normalizedQuery =	query.replace(/^0+/, "");
 
 	const matches =
 		searchIndex
-
 			.map(item => {
-
 				let score = 0;
 
 				const number =
-					(item.number || "")
-						.toLowerCase();
+					String(item.number || "");
 
 				const normalizedNumber =
 					number.replace(/^0+/, "");
 
 				const title =
-					(item.title || "")
-						.toLowerCase();
-
+					normalizeSearchText(
+						item.title || ""
+					);
+				
 				const excerpt =
-					(item.excerpt || "")
-						.toLowerCase();
+					normalizeSearchText(
+						item.excerpt || ""
+					);
 
 
 				// Prioridad máxima: ID exacto
@@ -202,7 +181,6 @@ function search(query) {
 					number === query ||
 					normalizedNumber === normalizedQuery
 				) {
-
 					score += 100;
 
 				}
@@ -248,13 +226,9 @@ function search(query) {
 			})
 
 			.filter(result => result.score > 0)
-
 			.sort((a, b) => b.score - a.score)
-
 			.slice(0, 10)
-
 			.map(result => result.item);
-
 	renderResults(matches);
 
 }
@@ -276,15 +250,10 @@ function openSearch() {
 
 
 	function closeSearch() {
-
 		overlay.classList.add("hidden");
-
 		input.blur();
-
 		input.value = "";
-
 		results.innerHTML = "";
-
 	}
 
 
@@ -425,4 +394,32 @@ async function setupSearchTranslations(lang) {
 			error
 		);
 	}
+}
+
+// Búsqueda tolerable con y sin acentos o circunflejos
+function normalizeSearchText(text) {
+
+	return text
+
+		.toLowerCase()
+
+		// Esperanto x-sistemo
+		.replace(/cx/g, "ĉ")
+		.replace(/gx/g, "ĝ")
+		.replace(/hx/g, "ĥ")
+		.replace(/jx/g, "ĵ")
+		.replace(/sx/g, "ŝ")
+		.replace(/ux/g, "ŭ")
+
+		// Esperanto h-sistemo
+		//.replace(/ch/g, "ĉ")
+		//.replace(/gh/g, "ĝ")
+		//.replace(/hh/g, "ĥ")
+		//.replace(/jh/g, "ĵ")
+		//.replace(/sh/g, "ŝ")
+
+		// Eliminar acentos y diacríticos
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "");
+
 }

@@ -28,6 +28,8 @@ module.exports = {
 	SITE_URL:
 		"https://lastajneuxronoj.github.io/",
 
+	SITE_NAME: "Lastaj Neŭronoj",
+
 	LANGUAGE_NAMES: {
 
 		//Agregar idiomas aquí
